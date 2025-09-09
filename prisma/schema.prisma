@@ -1,0 +1,38 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql" // pode ser "mysql" ou "sqlite" se preferir
+  url      = env("DATABASE_URL")
+}
+
+model Org {
+  id       String @id @default(uuid())
+  name     String
+  email    String @unique
+  password String
+  whatsapp String
+  address  String
+  city     String
+  pets     Pet[] // relação 1:N (uma ORG pode cadastrar vários pets)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Pet {
+  id           String  @id @default(uuid())
+  name         String
+  age          String // ex: "filhote", "adulto", "idoso"
+  size         String // ex: "pequeno", "médio", "grande"
+  energy       String // ex: "baixa", "média", "alta"
+  independency String // ex: "baixa", "média", "alta"
+  environment  String // ex: "amplo", "pequeno", "externo"
+  description  String?
+  orgId        String
+  org          Org     @relation(fields: [orgId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
