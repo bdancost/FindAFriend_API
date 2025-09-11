@@ -3,10 +3,6 @@ import { app } from './app.js'
 
 const PORT = process.env.PORT ? Number(process.env.PORT) : 3333
 
-/**
- * Função principal para iniciar o servidor.
- * Usamos try/catch para capturar erros ao subir a aplicação.
- */
 async function startServer() {
   try {
     await app.listen({ port: PORT, host: '0.0.0.0' }) // host 0.0.0.0 permite acesso externo (ex: Docker)
