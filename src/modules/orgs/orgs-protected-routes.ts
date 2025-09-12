@@ -7,7 +7,7 @@ export async function orgProtectedRoutes(app: FastifyInstance) {
   app.get(
     '/orgs/me',
     {
-      preHandler: [app.authenticate], // valida JWT antes de entrar no controller
+      preHandler: [app.use], // valida JWT antes de entrar no controller
     },
     OrgsController.me
   )
