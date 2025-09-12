@@ -1,41 +1,36 @@
-import Fastify from 'fastify'
-import cors from '@fastify/cors'
-import fastifyJWT from '@fastify/jwt'
+import fastifyJwt from '@fastify/jwt'
 import fastifyCookie from '@fastify/cookie'
-import { env } from './env/index.js'
+import fastify from 'fastify'
+import { ZodError } from 'zod'
+import { env } from '@/env/index.js'
 
-// Importando rotas e autenticação
-import { orgRoutes } from './modules/orgs/orgs.routes.js'
-import { orgProtectedRoutes } from './modules/orgs/orgs-protected-routes.js'
-import { registerAuth } from './modules/orgs/orgs-auth.js'
+import { orgsRoutes } from '@/http/controllers/orgs/orgs.routes.js'
+import { petsRoutes } from '@/http/controllers/pets/pets.routes.js'
 
-export const app = Fastify()
+export const app = fastify()
 
-// Configurações do Fastify
-app.register(cors, {
-  origin: true, // libera todos os domínios (em produção, restrinja!)
-})
-
-app.register(fastifyJWT, {
+app.register(fastifyJwt, {
   secret: env.JWT_SECRET,
-  cookie: { cookieName: 'refreshToken', signed: false },
   sign: {
-    expiresIn: '2h',
+    expiresIn: '7d',
   },
 })
 
 app.register(fastifyCookie)
 
-// Rota de health check
-app.get('/health', async () => {
-  return { status: 'ok' }
+app.register(orgsRoutes)
+app.register(petsRoutes)
+
+app.setErrorHandler((error, _, reply) => {
+  if (error instanceof ZodError) {
+    return reply.status(400).send({ message: 'Validation error.', issues: error.format() })
+  }
+
+  if (env.NODE_ENV !== 'production') {
+    console.error(error)
+  } else {
+    // TODO: Here we should log to a external tool like DataDog/NewRelic/Sentry
+  }
+
+  return reply.status(500).send({ message: 'Internal server error.' })
 })
-
-// 🔹 Registrar autenticação JWT
-await registerAuth(app)
-
-// 🔹 Registrar rotas públicas
-await orgRoutes(app)
-
-// 🔹 Registrar rotas protegidas
-await orgProtectedRoutes(app)
