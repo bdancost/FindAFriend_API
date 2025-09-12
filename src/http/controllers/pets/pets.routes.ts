@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify'
 
-import { verifyJwt } from '@/http/middlewares/verify-jwt'
+import { verifyJwt } from '@/http/middlewares/verify-jwt.js'
 
 import { createPetController } from '@/http/controllers/pets/create-pet.controller.js'
 import { getPetController } from '@/http/controllers/pets/get-pet.controller'
