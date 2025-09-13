@@ -1,37 +1,27 @@
+// tsconfig.json
 {
   "compilerOptions": {
-    // Diretórios de entrada e saída
-    "rootDir": "./src",
+    "rootDir": ".",
     "outDir": "./dist",
-
-    // Ambiente / Módulos
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "target": "ES2020",
-    "types": ["node"],
-
-    // Path aliases
-    "baseUrl": "./src",
+    "lib": ["ESNext"],
+    "types": ["node", "vitest/globals"],
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["*"]
+      "@/*": ["src/*"],
+      "@tests/*": ["tests/*"]
     },
-
-    // Saídas de declaração
     "sourceMap": true,
     "declaration": true,
     "declarationMap": true,
-
-    // Type checking rigoroso
     "strict": true,
-    "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": false,
     "isolatedModules": true,
-    "noUncheckedSideEffectImports": true,
     "skipLibCheck": true,
-
-    // Módulos Node ESM
     "verbatimModuleSyntax": true,
     "moduleDetection": "force"
   },
-  "include": ["src"]
+  "include": ["src/**/*", "tests/**/*"]
 }
