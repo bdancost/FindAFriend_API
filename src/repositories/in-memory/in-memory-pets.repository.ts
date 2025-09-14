@@ -5,8 +5,12 @@ import crypto from 'node:crypto'
 
 export class InMemoryPetsRepository implements PetsRepository {
   public items: Pet[] = []
+  private orgsRepository: InMemoryOrgsRepository
 
-  constructor(private orgsRepository: InMemoryOrgsRepository) {}
+  constructor(orgsRepository?: InMemoryOrgsRepository) {
+    this.orgsRepository = orgsRepository ?? new InMemoryOrgsRepository()
+    // 👆 se não passar nada, ele cria um novo InMemoryOrgsRepository por padrão
+  }
 
   async findAll(params: FindAllParams): Promise<Pet[]> {
     const orgsByCity = this.orgsRepository.items.filter((org) => org.city === params.city)
