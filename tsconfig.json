@@ -3,6 +3,7 @@
   "compilerOptions": {
     "rootDir": ".",
     "outDir": "./dist",
+    "typeRoots": ["./node_modules/@types", "./@types"],
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "target": "ES2020",
